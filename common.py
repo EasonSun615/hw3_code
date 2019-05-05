@@ -16,7 +16,7 @@ class Config:
     epochs = 20
     train_batch_size = 64
     test_batch_size = 64
-    evaluate_batch_interval = 100
+    evaluate_batch_interval = 10
     save_epoch_interval = 1
 
     @property

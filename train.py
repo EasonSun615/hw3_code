@@ -15,6 +15,7 @@ def train(prev_model_path=None):
     model = CRNN()
     net_out, raw_pred = model.build_infer_graph()
     loss = model.compute_loss(net_out)
+    print("1")
     # set optimizer
     global_step = tf.Variable(0, name='global_step', trainable=False)
     update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
@@ -30,6 +31,7 @@ def train(prev_model_path=None):
                         merge_repeated=False, top_paths=1)
     decoded = decoded[0]
     decoded_paths = tf.sparse_tensor_to_dense(decoded, default_value=config.class_num-1)
+    print('2')
 
 
     # evaluate on test set
@@ -56,6 +58,7 @@ def train(prev_model_path=None):
     os.makedirs(tboard_save_dir, exist_ok=True)
     tf.summary.scalar(name='train_loss', tensor=loss)
     merged = tf.summary.merge_all()
+    print("3")
 
     # Set saver configuration
     saver = tf.train.Saver()
@@ -66,6 +69,7 @@ def train(prev_model_path=None):
     sess = tf.Session()
     summary_writer = tf.summary.FileWriter(tboard_save_dir)
     summary_writer.add_graph(sess.graph)
+    print("4")
 
     # training
     global_cnt = 0
@@ -80,6 +84,7 @@ def train(prev_model_path=None):
             epoch = 0
         while epoch < config.epochs:
             epoch += 1
+            print("epoch now:%s"%epoch)
             for batch_idx, (inputdata, sparse_label, raw_label) in enumerate(dataset_train.one_epoch_generator()):
                 global_cnt += 1
                 loss_val, _, summary = sess.run([loss, train_op, merged], feed_dict={
@@ -88,6 +93,9 @@ def train(prev_model_path=None):
                                     model.place_holders['is_training']: True
                 })
                 summary_writer.add_summary(summary, global_cnt)
+
+                print('batch index now :%s'%batch_idx)
+
                 if (batch_idx+1)%config.evaluate_batch_interval == 0:
                     test_loss_val, test_acc = evaluate(sess, dataset_test)
                     print("----Epoch-{:n}, progress:{:.2%}, evaluation results:".format(epoch,
