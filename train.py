@@ -128,5 +128,5 @@ def cal_acc(label_pred, label_true):
     return cnt/len(label_pred)
 
 if __name__ == '__main__':
-    train('./tf_ckpt/CRNN-e7-acc59.7.ckpt-7')
-    #train()
+    # train('./tf_ckpt/CRNN-e7-acc59.7.ckpt-7')
+    train()
