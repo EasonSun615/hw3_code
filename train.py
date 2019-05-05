@@ -21,7 +21,8 @@ def train(prev_model_path=None):
     update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
     with tf.control_dependencies(update_ops):
         #optimizer = tf.train.AdamOptimizer()
-        optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.0005)
+        optimizer = tf.train.AdamOptimizer(0.1)
+        # optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.0005)
         train_op = optimizer.minimize(
             loss=loss, global_step=global_step)
     # decoder
